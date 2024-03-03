@@ -1,12 +1,12 @@
-import { Type } from '@nestjs/common';
-
-import { MappedType } from './mapped-type.interface';
 import {
   inheritPropertyInitializers,
   inheritTransformationMetadata,
   inheritValidationMetadata,
 } from './type-helpers.utils';
+
+import { MappedType } from './mapped-type.interface';
 import { RemoveFieldsWithType } from './types/remove-fields-with-type.type';
+import { Type } from './types/common';
 
 // https://stackoverflow.com/questions/50374908/transform-union-type-to-intersection-type
 type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (

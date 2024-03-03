@@ -1,11 +1,12 @@
-import { Type } from '@nestjs/common';
-import { MappedType } from './mapped-type.interface';
 import {
   inheritPropertyInitializers,
   inheritTransformationMetadata,
   inheritValidationMetadata,
 } from './type-helpers.utils';
+
+import { MappedType } from './mapped-type.interface';
 import { RemoveFieldsWithType } from './types/remove-fields-with-type.type';
+import { Type } from './types/common';
 
 export function PickType<T, K extends keyof T>(
   classRef: Type<T>,
