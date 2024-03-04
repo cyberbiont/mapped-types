@@ -1,5 +1,5 @@
 {
-  "name": "@nestjs/mapped-types",
+  "name": "@cyberbiont/mapped-types",
   "version": "2.0.5",
   "description": "Nest - modern, fast, powerful node.js web framework (@mapped-types)",
   "author": "Kamil Mysliwiec",
