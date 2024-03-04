@@ -1,6 +1,16 @@
 import 'reflect-metadata';
+import {
+  IsOptional,
+  getMetadataStorage,
+  getFromContainer,
+  MetadataStorage,
+  ValidateIf,
+} from 'class-validator';
 
 import { Type } from './types/common';
+
+const { defaultMetadataStorage } = require('class-transformer/cjs/storage.js');
+
 /* eslint-disable @typescript-eslint/no-var-requires */
 export function applyIsOptionalDecorator(
   targetClass: Function,
@@ -9,8 +19,7 @@ export function applyIsOptionalDecorator(
   if (!isClassValidatorAvailable()) {
     return;
   }
-  const classValidator: typeof import('class-validator') = require('class-validator');
-  const decoratorFactory = classValidator.IsOptional();
+  const decoratorFactory = IsOptional();
   decoratorFactory(targetClass.prototype, propertyKey);
 }
 
@@ -21,10 +30,8 @@ export function applyValidateIfDefinedDecorator(
   if (!isClassValidatorAvailable()) {
     return;
   }
-  const classValidator: typeof import('class-validator') = require('class-validator');
-  const decoratorFactory = classValidator.ValidateIf(
-    (_, value) => value !== undefined,
-  );
+
+  const decoratorFactory = ValidateIf((_, value) => value !== undefined);
   decoratorFactory(targetClass.prototype, propertyKey);
 }
 
@@ -37,12 +44,9 @@ export function inheritValidationMetadata(
     return;
   }
   try {
-    const classValidator: typeof import('class-validator') = require('class-validator');
-    const metadataStorage: import('class-validator').MetadataStorage = (
-      classValidator as any
-    ).getMetadataStorage
-      ? (classValidator as any).getMetadataStorage()
-      : classValidator.getFromContainer(classValidator.MetadataStorage);
+    const metadataStorage = getMetadataStorage
+      ? getMetadataStorage()
+      : getFromContainer(MetadataStorage);
 
     const getTargetValidationMetadatasArgs = [parentClass, null!, false, false];
     const targetMetadata: ReturnType<
@@ -127,16 +131,7 @@ function inheritTransformerMetadata(
   targetClass: Function,
   isPropertyInherited?: (key: string) => boolean,
 ) {
-  let classTransformer: any;
-  try {
-    /** "class-transformer" >= v0.3.x */
-    classTransformer = require('class-transformer/cjs/storage');
-  } catch {
-    /** "class-transformer" <= v0.3.x */
-    classTransformer = require('class-transformer/storage');
-  }
-  const metadataStorage /*: typeof import('class-transformer/types/storage').defaultMetadataStorage */ =
-    classTransformer.defaultMetadataStorage;
+  const metadataStorage = defaultMetadataStorage;
 
   while (parentClass && parentClass !== Object) {
     if (metadataStorage[key].has(parentClass)) {
