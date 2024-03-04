@@ -9,6 +9,7 @@ import {
 
 import { Type } from './types/common';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { defaultMetadataStorage } = require('class-transformer/cjs/storage.js');
 
 /* eslint-disable @typescript-eslint/no-var-requires */
